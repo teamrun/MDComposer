@@ -4,6 +4,19 @@ var WriterStore = require('../store/WriterStore');
 var Paragraph = require('./Paragraph.react.js');
 var Ineo = require('./Ineo.react');
 
+
+/*
+ * 都是有哪些可以自定义: 
+ *      节点: preNodes, afterNodes: 在正文之前和之后可以插入这些节点
+ *      内容处理器 processor: 用户编辑的内容经过这个processor后再渲染
+ *      option对象: 
+ *          insertWay: 如何插入渲染的内容, 
+ *              'content': 安全的方式, 类似innerText
+ *              'setHtml': 不安全的方式, 调用 dangerouslySetInnerHTML
+ *              'node': 直接return出process后生成的ReactDOM
+ *          
+*/
+
 var App = React.createClass({
     getInitialState: function(){
         return {data: []};
@@ -21,7 +34,10 @@ var App = React.createClass({
     render: function() {
         var data = this.state.data;
         var nodes = data.map(function(d, i){
-                return <Paragraph key={d.id} data={d} />;
+                return <Paragraph key={d.id} 
+                    data={d} 
+                    processor={this.props.processor}
+                    option={this.props.option}   />;
         }.bind(this));
         
         return (
