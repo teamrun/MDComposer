@@ -1,10 +1,20 @@
 var React = require('react');
 var TextComposer = require('../../index');
 
+var getMD = require('./selfMadeMD');
+
 var converter = new Showdown.converter();
 
 var option = {
     insertWay: 'setHtml'
+}
+
+var tcLineStateGen = function(raw){
+    var mdData = getMD(raw);
+    return {
+        processed: mdData.htmlWithStart,
+        extraClasses: [mdData.tag]
+    }
 }
 
 var MarkdownEditor = React.createClass({
@@ -17,7 +27,7 @@ var MarkdownEditor = React.createClass({
                 afterNodes={<span>xxxxxx</span>}
 
                 /* about customize content */
-                processor={converter.makeHtml.bind(converter)}
+                stateGen={ tcLineStateGen }
                 option={ option }
             />
         );

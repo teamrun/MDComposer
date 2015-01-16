@@ -36,7 +36,7 @@ var App = React.createClass({
         var nodes = data.map(function(d, i){
                 return <Paragraph key={d.id} 
                     data={d} 
-                    processor={this.props.processor}
+                    stateGen={this.props.stateGen}
                     option={this.props.option}   />;
         }.bind(this));
         

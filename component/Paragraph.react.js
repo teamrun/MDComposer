@@ -1,4 +1,7 @@
-var React = require('react');
+var React = require('react/addons');
+var assign = require('react/lib/Object.assign');
+var CX = React.addons.ClassSet;
+
 var WriterActions = require('../config/WriterActions');
 
 /* editing status:
@@ -7,22 +10,26 @@ var WriterActions = require('../config/WriterActions');
  *      2: processed || done
  */
 
-function defaultProcessor(raw){
-    return raw;
+function defaultStateGen(raw){
+    return {
+        processed: raw
+    };
 }
 
 function renderContent(){
     var content = this.state.processed;
+    var extraClasses = this.state.extraClasses.join(' ');
     return (
-        <div className="tc-line"
+        <div className={"tc-line " + extraClasses}
             onClick={this._onClick}
         >{ content }</div>
     );
 }
 function renderHtml(){
     var html = { __html: this.state.processed };
+    var extraClasses = this.state.extraClasses.join(' ');
     return (
-        <div className="tc-line"
+        <div className={"tc-line " + extraClasses}
             onClick={this._onClick}
             dangerouslySetInnerHTML={html}
         ></div>
@@ -49,22 +56,30 @@ function getRenderFunc(props){
     }
 }
 
+var getDefaultState = function(raw){
+    return {
+        raw: raw,
+        extraClasses: []
+    };
+}
+
 var Paragraph = React.createClass({
     getInitialState: function(){
         console.log('getInitialState');
-        if(this.props.processor instanceof Function ){
-            this.genContent = this.props.processor;
+        if(this.props.stateGen instanceof Function ){
+            this.stateGen = this.props.stateGen;
         }
         else{
-            this.genContent = defaultProcessor;
+            this.stateGen = defaultStateGen;
         }
         // console.log('a new instanceof this component will render');
         var raw = this.props.data.raw;
         this._render = getRenderFunc(this.props).bind(this);
-        return {
-            raw: raw,
-            processed: this.genContent(raw)
-        };
+
+        // 默认的state + 由使用者传递来的state generator
+        var defaultState = getDefaultState(raw);
+        var extraState =  this.stateGen(raw);
+        return assign(defaultState, extraState);
     },
     componentWillMount: function(){
         console.log('componentWillMount');
@@ -79,10 +94,9 @@ var Paragraph = React.createClass({
     componentWillReceiveProps: function(nextProps){
         console.log('componentWillReceiveProps');
         // 尽管后面shouldUpdata会有判断 但是还是要减少一次计算
-        if(nextProps.data.raw !== this.props.data.raw){
-            this.setState({
-                processed: this.genContent(nextProps.data.raw)
-            });
+        var newRaw = nextProps.data.raw;
+        if( newRaw!== this.props.data.raw){
+            this.setState(this.stateGen());
         }
         
     },
