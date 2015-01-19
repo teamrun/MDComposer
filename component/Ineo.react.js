@@ -26,7 +26,7 @@ var Ineo = React.createClass({
                 this.input.value = '    ';
             }
             else{
-                this.input.value = '    ';
+                this.input.value = '';
             }
             
         }

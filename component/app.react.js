@@ -9,6 +9,14 @@ var Ineo = require('./Ineo.react');
 var MD = require('../markdown/md-with-context');
 
 
+// var ENV = 'pro';
+var ENV = 'dev';
+
+var debugClasses = {
+    pro: '',
+    dev: 'dev'
+};
+
 
 var App = React.createClass({
     getInitialState: function(){
@@ -34,7 +42,7 @@ var App = React.createClass({
         }.bind(this));
         
         return (
-            <div className="md-composer">
+            <div className={"md-composer "+debugClasses[ENV]}>
                 {this.props.preNodes}
                 {nodes}
                 <Ineo submitHandler={this.editDone}/>

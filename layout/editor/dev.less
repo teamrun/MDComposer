@@ -1,0 +1,25 @@
+// dev 环境下: 
+.md-composer.dev{
+
+    // 显示line的class
+    .tc-line{
+        position: relative;
+        &:after{
+            content: attr(class);
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 0 0.5em;
+            font-size: 0.75em;
+            line-height: inherit;
+            background-color: #f5f5f5;
+            color: #999;
+            opacity: 0.5;
+        }
+    }
+    
+    // 给输入框着色
+    .ineo-input{
+        background-color: #f3f3f3;
+    }
+}
