@@ -8,6 +8,7 @@ var WriterConstants = require('../config/WriterConstants');
 
 // 应该有个顺序, 否则insertAfter会不太好实现
 var WriterData = {};
+var DataOrder = [];
 var focusIndex=0;
 
 function objAttrCount(obj){
@@ -18,12 +19,11 @@ function objAttrCount(obj){
     return res;
 }
 
-function finishThich(content){
+function createLine(lineObj){
     var newId = shortId.generate();
-    WriterData[newId] = {
-        id: newId,
-        raw: content
-    };
+    lineObj.id = newId;
+    WriterData[newId] = lineObj;
+    DataOrder.push(newId);
 }
 
 
@@ -34,6 +34,10 @@ var WriteStore = assign({}, EventEmmiter.prototype, {
             arr.push(WriterData[i]);
         }
         return arr;
+    },
+    getLast: function(){
+        var lastId = DataOrder[DataOrder.length-1];
+        return WriterData[lastId];
     },
     getFocus: function(){
         return focusIndex;
@@ -54,8 +58,13 @@ WriterDispather.register(function(action){
     var type = action.actionType;
 
     switch (type){
-        case WriterConstants.Thich_Finish:
-            finishThich(action.content);
+        case WriterConstants.LINE_CREATE:
+            var lineObj = {
+                raw: action.raw,
+                processed: action.processed,
+                tag: action.tag
+            };
+            createLine(lineObj);
             WriteStore.emitChange();
             break;
         default :

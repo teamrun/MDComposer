@@ -6,10 +6,12 @@ var WriterActions = {
      * 完成了一行的编辑, 把写好的内容渲染出来吧~
      * @param: content
      */
-    finishThich: function(content){
+    createLine: function(raw, tag, processed){
         WriterDispatcher.dispatch({
-            actionType: WriterConstants.Thich_Finish,
-            content: content
+            actionType: WriterConstants.LINE_CREATE,
+            raw: raw,
+            processed: processed,
+            tag: tag
         });
     },
     /*

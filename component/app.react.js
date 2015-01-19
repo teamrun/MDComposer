@@ -1,8 +1,12 @@
 var React = require('react');
+
 var WriterStore = require('../store/WriterStore');
+var WriteActions = require('../config/WriterActions');
 
 var Paragraph = require('./Paragraph.react.js');
 var Ineo = require('./Ineo.react');
+
+var MD = require('../markdown/md-with-context');
 
 
 
@@ -25,15 +29,15 @@ var App = React.createClass({
         var nodes = data.map(function(d, i){
                 return <Paragraph
                     key={d.id} 
-                    content={d.raw}
-                    classes={'p'} />;
+                    content={d.processed}
+                    classes={d.tag} />;
         }.bind(this));
         
         return (
             <div className="md-composer">
                 {this.props.preNodes}
                 {nodes}
-                <Ineo />
+                <Ineo submitHandler={this.editDone}/>
                 {this.props.afterNodes}
             </div>
         );
@@ -42,6 +46,13 @@ var App = React.createClass({
         this.setState({
             data: WriterStore.getAll()
         });
+    },
+    editDone: function(raw){
+        var ctx = WriterStore.getLast();
+        var lastTag = ctx? ctx.tag: undefined;
+        var mdData = MD(lastTag, raw);
+        WriteActions.createLine(raw, mdData.tag, mdData.htmlWithStart);
+        return mdData;
     }
 });
 

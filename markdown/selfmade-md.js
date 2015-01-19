@@ -38,14 +38,17 @@ module.exports = function(raw){
         case (raw.startWith('* ')):
             tag = 'list-item';
             break;
+        case (raw.trim() === ''):
+            tag = 'empty';
+            break;
         default:
-            tag = 'p'
+            tag = 'p';
             break;
     }
-
+    var processed = raw.replace(/\ /g, '&nbsp;');
 
     return {
         tag: tag,
-        htmlWithStart: raw
+        htmlWithStart: processed
     };
 }

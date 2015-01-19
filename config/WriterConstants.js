@@ -1,5 +1,5 @@
 var keyMirror = require('keymirror');
 
 module.exports = keyMirror({
-    Thich_Finish: null
+    LINE_CREATE: null
 });

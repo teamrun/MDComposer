@@ -34,8 +34,9 @@ var Paragraph = React.createClass({
     },
     render: function() {
         return (<div className={"tc-line " + this.state.classes}
-                    onClick={this._onClick}>
-                    {this.state.content}
+                    onClick={this._onClick}
+                    dangerouslySetInnerHTML={ {__html: this.state.content} }
+                >
                 </div>);
     },
     _onClick: function(){
