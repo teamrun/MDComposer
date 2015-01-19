@@ -5,7 +5,6 @@
  *      blockquote
  *      ul ol
  *      li
- *      
  *      code
  * 
  * 
@@ -27,6 +26,17 @@ module.exports = function(raw){
         case (raw.startWith('#')):
             var hashSymbleCount = raw.match(/^\#+/)[0].length;
             tag = 'h'+hashSymbleCount;
+            break;
+        // 引用
+        case (raw.startWith('>')):
+            tag = 'blockquote';
+            break;
+        // 四个空格
+        case (raw.startWith('    ')):
+            tag = 'code-block';
+            break;
+        case (raw.startWith('* ')):
+            tag = 'list-item';
             break;
         default:
             tag = 'p'

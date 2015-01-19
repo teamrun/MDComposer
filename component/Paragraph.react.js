@@ -4,119 +4,69 @@ var CX = React.addons.ClassSet;
 
 var WriterActions = require('../config/WriterActions');
 
-/* editing status:
- *      0: editing
- *      1: processing || loading
- *      2: processed || done
- */
-
-function defaultStateGen(raw){
-    return {
-        processed: raw
-    };
-}
-
-function renderContent(){
-    var content = this.state.processed;
-    var extraClasses = this.state.extraClasses.join(' ');
-    return (
-        <div className={"tc-line " + extraClasses}
-            onClick={this._onClick}
-        >{ content }</div>
-    );
-}
-function renderHtml(){
-    var html = { __html: this.state.processed };
-    var extraClasses = this.state.extraClasses.join(' ');
-    return (
-        <div className={"tc-line " + extraClasses}
-            onClick={this._onClick}
-            dangerouslySetInnerHTML={html}
-        ></div>
-    );
-}
-function renderNode(){
-    var node = this.state.processed;
-    return node;
-}
 
 // 通过传来的props  生成render function 
 function getRenderFunc(props){
     var insertWay = props.option.insertWay;
+    
     switch(insertWay){
         case 'content':
-            return renderContent;
-            break;
+            return function(){
+                var content = this.state.content;
+                var extraClasses = this.state.classes;
+                return (<div className={"tc-line " + extraClasses}
+                    onClick={this._onClick}>
+                    {content}
+                </div>)
+            };
         case 'setHtml':
-            return renderHtml;
-            break;
-        case 'node': 
-            return renderNode;
-            break;
+            return function(){
+                var content = this.state.content;
+                var extraClasses = this.state.classes;
+                return (<div className={"tc-line " + extraClasses}
+                    onClick={this._onClick} 
+                    dangerouslySetInnerHTML={ {__html: content} }
+                    >
+                </div>)
+            };
+        // case 'node': 
+        //     return renderNode;
+        //     break;
     }
 }
 
-var getDefaultState = function(raw){
-    return {
-        raw: raw,
-        extraClasses: []
-    };
-}
 
 var Paragraph = React.createClass({
     getInitialState: function(){
-        console.log('getInitialState');
-        if(this.props.stateGen instanceof Function ){
-            this.stateGen = this.props.stateGen;
-        }
-        else{
-            this.stateGen = defaultStateGen;
-        }
-        // console.log('a new instanceof this component will render');
-        var raw = this.props.data.raw;
+        
         this._render = getRenderFunc(this.props).bind(this);
 
-        // 默认的state + 由使用者传递来的state generator
-        var defaultState = getDefaultState(raw);
-        var extraState =  this.stateGen(raw);
-        return assign(defaultState, extraState);
+        return {
+            content: this.props.content,
+            classes: this.props.classes
+        };
     },
     componentWillMount: function(){
-        console.log('componentWillMount');
+        // console.log('componentWillMount');
     },
     componentDidMount: function(){
-        console.log('componentDidMount');
-        // console.log(this.props.data.id, this.props.focus);
-        // if(this.props.focus == true){
-        //     this.getDOMNode().focus();
-        // }
+        // console.log('componentDidMount');
     },
     componentWillReceiveProps: function(nextProps){
-        console.log('componentWillReceiveProps');
+        // console.log('componentWillReceiveProps');
         // 尽管后面shouldUpdata会有判断 但是还是要减少一次计算
-        var newRaw = nextProps.data.raw;
-        if( newRaw!== this.props.data.raw){
-            this.setState(this.stateGen());
-        }
-        
     },
-    shouldComponentUpdate: function(nextProps, nextState){
-        // 内容有变更时才更新
-        console.log('checking for should update');
-        return nextProps.data.raw !== this.props.data.raw;
-    },
+    // shouldComponentUpdate: function(nextProps, nextState){
+    //     // 内容有变更时才更新
+    //     // console.log('checking for should update');
+    //     // return nextProps.data.raw !== this.props.data.raw;
+    // },
     componentDidUpdate: function(){
         //
         //console.log('owneeeee updated');
     },
     render: function() {
         return this._render();
-        // var content = this.state.processed;
-        // return (
-        //     <div className="tc-line"
-        //         onClick={this._onClick}
-        //     >{ content }</div>
-        // );
     },
     _onClick: function(){
         /* 点击后会出现range

@@ -34,9 +34,11 @@ var App = React.createClass({
     render: function() {
         var data = this.state.data;
         var nodes = data.map(function(d, i){
-                return <Paragraph key={d.id} 
-                    data={d} 
-                    stateGen={this.props.stateGen}
+                var pRender = this.props.getRender(d, i);
+                return <Paragraph
+                    key={d.id}
+                    content={pRender.content}
+                    classes={pRender.classes}
                     option={this.props.option}   />;
         }.bind(this));
         

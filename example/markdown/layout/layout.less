@@ -1,0 +1,44 @@
+*{
+    box-sizing: border-box;
+}
+
+@rootF: 20px;
+
+.tc-line,
+.ineo-input{
+    line-height: 1.5;
+    margin: 0.25em 0;
+    padding: 0.25em @rootF*0.5;
+    &.h*{
+        font-weight: bold;
+    }
+    &.h1{
+        font-size: @rootF*1.75;
+    }
+    &.h2{
+        font-size: @rootF*1.5;
+    }
+    &.h3{
+        font-size: @rootF*1.375;
+    }
+    &.h4{
+        font-size: @rootF;
+    }
+
+    &.p{
+        font-size: @rootF;
+    }
+
+    &.blockquote{
+        // font-size: @rootF;
+        color: #999;
+        border: none;
+        margin-left: -2em;
+        border-left: 4px solid #ccc;
+        padding-left: 2*@rootF - 4px;
+    }
+
+    &.pre.code{
+        background-color: #384047;
+    }
+}

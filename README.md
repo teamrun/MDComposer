@@ -30,7 +30,7 @@ if you use other build tools, like gulp grunt browserify:
 
      * 都是有哪些可以自定义: 
      *      节点: preNodes, afterNodes: 在正文之前和之后可以插入这些节点
-     *      内容处理器 processor: 用户编辑的内容经过这个processor后再渲染
+     *      内容渲染组件的所需要的props: getRender: 接收要渲染的数据, 计算出渲染的内容
      *      option对象: 
      *          insertWay: 如何插入渲染的内容, 
      *              'content': 安全的方式, 类似innerText

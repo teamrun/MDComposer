@@ -4,7 +4,8 @@
   "description": "A basic composer build with react",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,6 @@
     "flux": "^2.0.1",
     "jsx-loader": "^0.12.2",
     "keymirror": "^0.1.1",
-    "less": "^2.2.0",
     "less-loader": "^2.0.0",
     "react-hot-loader": "^1.1.1",
     "shortid": "^2.1.3",

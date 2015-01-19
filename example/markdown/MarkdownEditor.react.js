@@ -3,17 +3,20 @@ var TextComposer = require('../../index');
 
 var getMD = require('./selfMadeMD');
 
-var converter = new Showdown.converter();
+// var converter = new Showdown.converter();
+
+require('./layout/layout.less');
 
 var option = {
     insertWay: 'setHtml'
 }
 
-var tcLineStateGen = function(raw){
-    var mdData = getMD(raw);
+// 获取Paragraph渲染需要的东西:  content, classes
+var getRender = function(lineData, index){
+    var mdData = getMD(lineData.raw);
     return {
-        processed: mdData.htmlWithStart,
-        extraClasses: [mdData.tag]
+        content: mdData.htmlWithStart,
+        classes: mdData.tag
     }
 }
 
@@ -27,7 +30,7 @@ var MarkdownEditor = React.createClass({
                 afterNodes={<span>xxxxxx</span>}
 
                 /* about customize content */
-                stateGen={ tcLineStateGen }
+                getRender={getRender}
                 option={ option }
             />
         );

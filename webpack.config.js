@@ -1,6 +1,8 @@
 var path = require('path');
+
 var webpack = require('webpack');
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
+
 
 module.exports = {
     entry: {
@@ -20,10 +22,11 @@ module.exports = {
     ],
     module: {
         loaders: [
-             { test: /\.less$/, loader: "style-loader!css-loader!less-loader" },
+             { test: /\.less$/, loaders: ['style-loader', 'css-loader', 'less-loader'] },
              { test: /\.js$/, loaders: ['react-hot', 'jsx?harmony'] }
         ]
     },
+    // postcss: [autoPrefixer],
     // react模块使用全局变量 不需要再打包起来
     externals: {
         // react: 'React'
