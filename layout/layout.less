@@ -16,16 +16,25 @@ body{
     }
 }
 
-.text-composer{
-    width: 700px;
+.md-composer{
     height: 100%;
-    margin: 0 auto;
     padding: 2em;
     overflow: auto;
+
+    font-family: "Anonymous Pro";
+    line-height: 1.5;
+    font-size: 16px;
+    
     background-color: #fff;
     box-shadow: 0 0 10px #222;
+ 
+    &, *{
+        box-sizing: border-box;
+    }
 }
 
 @import "editor/common.less";
 @import "editor/ineo.less";
 @import "editor/paragraph.less";
+
+@import "md/md-style.less";

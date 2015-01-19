@@ -6,8 +6,8 @@ var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 
 module.exports = {
     entry: {
-        basic: ['./example/basic/app'],
-        markdown: ['./example/markdown/app']
+        demo: ['./example/demo']
+        // markdown: ['./index']
     },
     output: {
         path: path.join(__dirname, 'example/dist') ,
@@ -16,7 +16,7 @@ module.exports = {
         publicPath: '/example/dist/'
     },
     plugins: [
-        new CommonsChunkPlugin("share.js"),
+        // new CommonsChunkPlugin("share.js"),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin()
     ],

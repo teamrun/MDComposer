@@ -1,5 +1,5 @@
 var App = require('./component/app.react');
 // require styles here
-require('./layout/less/layout.less');
+require('./layout/layout.less');
 
 module.exports = App;

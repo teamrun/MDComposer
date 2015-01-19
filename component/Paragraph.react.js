@@ -5,45 +5,12 @@ var CX = React.addons.ClassSet;
 var WriterActions = require('../config/WriterActions');
 
 
-// 通过传来的props  生成render function 
-function getRenderFunc(props){
-    var insertWay = props.option.insertWay;
-    
-    switch(insertWay){
-        case 'content':
-            return function(){
-                var content = this.state.content;
-                var extraClasses = this.state.classes;
-                return (<div className={"tc-line " + extraClasses}
-                    onClick={this._onClick}>
-                    {content}
-                </div>)
-            };
-        case 'setHtml':
-            return function(){
-                var content = this.state.content;
-                var extraClasses = this.state.classes;
-                return (<div className={"tc-line " + extraClasses}
-                    onClick={this._onClick} 
-                    dangerouslySetInnerHTML={ {__html: content} }
-                    >
-                </div>)
-            };
-        // case 'node': 
-        //     return renderNode;
-        //     break;
-    }
-}
-
-
 var Paragraph = React.createClass({
     getInitialState: function(){
-        
-        this._render = getRenderFunc(this.props).bind(this);
 
         return {
-            content: this.props.content,
-            classes: this.props.classes
+            content: this.props.content || '',
+            classes: this.props.classes || ''
         };
     },
     componentWillMount: function(){
@@ -66,7 +33,10 @@ var Paragraph = React.createClass({
         //console.log('owneeeee updated');
     },
     render: function() {
-        return this._render();
+        return (<div className={"tc-line " + this.state.classes}
+                    onClick={this._onClick}>
+                    {this.state.content}
+                </div>);
     },
     _onClick: function(){
         /* 点击后会出现range

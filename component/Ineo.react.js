@@ -11,7 +11,7 @@ var Ineo = React.createClass({
     render: function(){
         return (
             <div className="ineo">
-                <textarea className={"ineo-input "+this.props.extraClass.join(' ')}
+                <textarea className={"ineo-input"}
                     ref="ineo-input"
                     onKeyDown={this._onKeyDown}
                 />
