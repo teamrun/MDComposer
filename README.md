@@ -36,3 +36,7 @@ if you use other build tools, like gulp grunt browserify:
      *              'content': 安全的方式, 类似innerText
      *              'setHtml': 不安全的方式, 调用 dangerouslySetInnerHTML
      *              'node': 直接return出process后生成的ReactDOM
+
+### 那些可能需要兼容
+* 获取selection
+* 设置selection

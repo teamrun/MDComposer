@@ -9,7 +9,7 @@ var Ineo = React.createClass({
     },
     render: function(){
         return (
-            <div className="ineo">
+            <div className="ineo" style={this.props.style}>
                 <textarea className={"ineo-input"}
                     ref="ineo-input"
                     onKeyDown={this._onKeyDown}

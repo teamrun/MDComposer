@@ -42,6 +42,9 @@ var WriteStore = assign({}, EventEmmiter.prototype, {
     getFocus: function(){
         return focusIndex;
     },
+    getLine: function(lineId){
+        return WriterData[lineId];
+    },
     emitChange: function(){
         this.emit('change');
     },

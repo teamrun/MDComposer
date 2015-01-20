@@ -43,6 +43,8 @@ var Paragraph = React.createClass({
         /* 点击后会出现range
          * 将range位置, 和 自己的id传给action, action去做输入器的定位
          */
+        
+        this.props.editLine(this.props.lineId);
     }
 });
 

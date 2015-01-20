@@ -2,14 +2,14 @@
     box-sizing: border-box;
 }
 
-@rootF: 20px;
 @lineH: 1.35;
 
-.tc-line,
-.ineo-input{
-    min-height: @lineH*1em + 0;
-    margin: 0.25em 0;
+.tc-line{
     padding: 0;
+}
+.tc-line,
+.ineo .ineo-input{
+    margin: 0.25em 0;
 
     line-height: @lineH;
     &.h*{
@@ -53,4 +53,8 @@
         // margin-top: 1em;
         // }
     }
+}
+
+.ineo .ineo-input{
+    margin: 0;
 }

@@ -1,3 +1,4 @@
+@rootF: 20px;
 html{
     height: 100%;
 }
@@ -9,7 +10,7 @@ body{
     box-sizing: border-box;
     font-family: "Anonymous Pro";
     line-height: 1.5;
-    font-size: 16px;
+    font-size: @rootF;
 
     *{
         box-sizing: border-box;
@@ -17,13 +18,14 @@ body{
 }
 
 .md-composer{
+    position: relative;
     height: 100%;
     padding: 2em;
     overflow: auto;
 
     font-family: "Anonymous Pro";
     line-height: 1.5;
-    font-size: 16px;
+    font-size: @rootF;
     
     background-color: #fff;
     box-shadow: 0 0 10px #222;
