@@ -4,15 +4,32 @@
     left: 0;
     right: 0;
     transition: transform 200ms ease;
+    
+    .ineo-input,
+    .size-gen{
+        width: 100%;
+        padding: 0 2em;
+        word-break: break-all;
+    }
 
     .ineo-input{
-        width: 100%;
-        min-height: 100%;
-        padding: 0 2em;
+        position: relative;
+        height: @lineH * @rootF;
         
         resize: none;
 
         border: none;
         outline: none;
+        z-index: 100;
+    }
+
+    .size-gen{
+        position: absolute;
+        // top: 0;
+        left: 0;
+        right: 0;
+        z-index: -10;
+        height: auto;
+        min-height: @lineH * @rootF;
     }
 }

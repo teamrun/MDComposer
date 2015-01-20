@@ -7,6 +7,7 @@ var Paragraph = require('./Paragraph.react.js');
 var Ineo = require('./Ineo.react');
 
 var MD = require('../util/md-with-context');
+var util = require('../util');
 
 
 // var ENV = 'pro';
@@ -16,9 +17,6 @@ var debugClasses = {
     pro: '',
     dev: 'dev'
 };
-function getStyleValue(styleValueStr){
-    return Number(styleValueStr.substr(0, styleValueStr.length-2))
-}
 
 
 var App = React.createClass({
@@ -108,8 +106,8 @@ var App = React.createClass({
             var datas = this.state.data;
             if(datas.length === 0){
                 var comStyle = window.getComputedStyle(this.getDOMNode())
-                var paddingTop = getStyleValue( comStyle.paddingTop );
-                var borderTop = getStyleValue( comStyle.borderTopWidth );
+                var paddingTop = util.getStyleValue( comStyle.paddingTop );
+                var borderTop = util.getStyleValue( comStyle.borderTopWidth );
                 
                 y = paddingTop + borderTop;
             }
@@ -117,8 +115,8 @@ var App = React.createClass({
                 line = this.refs[datas[datas.length-1].id].getDOMNode();
                 var lineTop = line.offsetTop;
                 var lineStyle = window.getComputedStyle(line);
-                var h = getStyleValue(lineStyle.height);
-                var marginBottom = getStyleValue(lineStyle.marginBottom);
+                var h = util.getStyleValue(lineStyle.height);
+                var marginBottom = util.getStyleValue(lineStyle.marginBottom);
                 
                 y = lineTop + h + marginBottom;
             }

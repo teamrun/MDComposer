@@ -1,17 +1,11 @@
 .tc-line{
-    padding: 0.25em 0.5em;
+    min-height: @lineH*@rootF;
 }
 .tc-line,
 .ineo .ineo-input{
-    font-size: 20px;
-    line-height: 1.5;
+    font-size: @rootF;
+    line-height: @lineH;
     font-family: "Anonymous Pro";
 
     // inline的那些样式就暂时没办法了... 斜体 粗体 inline代码...
-}
-.ineo{
-    min-height: 1.5*1em;
-    .ineo-input{
-        height: 1.5em;
-    }
 }
