@@ -8,6 +8,7 @@ var Ineo = require('./Ineo.react');
 
 var MD = require('../util/md-with-context');
 var util = require('../util');
+var SR = require('../util/sr');
 
 
 // var ENV = 'pro';
@@ -64,12 +65,17 @@ var App = React.createClass({
         }.bind(this));
 
         /*---------- 编辑框 ----------*/
-        var InoeNode = <Ineo 
-            submitHandler={this.createDone}
-            style={this.state.ineoStyle} />
+        var InoeNode = (
+            <Ineo 
+                submitHandler={this.createDone}
+                style={this.state.ineoStyle}
+                manualFocus={this.state.inputFocus}
+                editLineData={this.state.editLineData} >
+            </Ineo>
+        );
         
         return (
-            <div className={"md-composer "+debugClasses[ENV]}>
+            <div className={"md-composer "+debugClasses[ENV]} onClick={this._onClick}>
                 {this.props.preNodes}
                 {LineNodes}
                 {InoeNode}
@@ -77,12 +83,13 @@ var App = React.createClass({
             </div>
         );
     },
+    /* -------------------- 功能函数 -------------------- */
     getStoreData: function(){
         this.setState({
             data: WriterStore.getAll()
         });
     },
-    // 输入框绝对定位 以便随时编辑某行(定位到这一行,clone它的class, 填充它的内容 将其遮盖, )
+    // 输入框绝对定位(只关乎 translateY 和 marginTop ) 以便随时编辑某行(定位到这一行,clone它的class, 填充它的内容 将其遮盖, )
     // 需要重新计算定位的时机: 
     //      写完了新的一行, 回车新建行之后 要将输入框定位到刚渲染好的line直下
     //          此时不需要传lineId
@@ -95,8 +102,9 @@ var App = React.createClass({
         if(lineId){
             style.marginTop = '0em';
             line = this.refs[lineId].getDOMNode();
-            var lineStyle = window.getComputedStyle(line);
-            style.height = lineStyle.height;
+            // 不需要计算高度, 由输入组件内部的size-gen来计算( 可能会有闪动~? )
+            // var lineStyle = window.getComputedStyle(line);
+            // style.height = lineStyle.height;
             
             y = line.offsetTop;
         }
@@ -145,8 +153,46 @@ var App = React.createClass({
         }
     },
     ineoEditLine: function(lineId){
+        var selData = SR.getSelection();
+        // 获取line数据, 需要tag和raw
         var lineData = WriterStore.getLine(lineId);
+
+        this.setState({
+            editLineData: {
+                id: lineData.id,
+                tag: lineData.tag,
+                raw: lineData.raw,
+                // 现在设定的是line中没有其他子节点的情况下的鼠标位置
+                // 如果有子节点的话 还需要进一步的计算基于line的offset
+                cursor: selData.startOffset
+            },
+
+            inputFocus: true
+        });
+
         this.updateInputStyle(lineId);
+    },
+    /* -------------------- 事件处理 -------------------- */
+    // 点击到编辑器主体时, 将输入框聚焦, 且定位到最下面
+    // 实现这个, 需要 line 和 input 做stopBubble
+    _onClick: function(){
+        var sel = window.getSelection();
+        // 鼠标划选line时 会在父节点形成点击事件
+        if(!sel.isCollapsed){
+            this.setState({
+                inputFocus: false
+            });
+            return;
+        }
+        // 聚焦
+        this.setState({
+            inputFocus: true,
+            // 清空之前的editData
+            editLineData: false
+        });
+        // 定位 到新起一行
+        this.updateInputStyle();
+        // 提交当前行~? 如何提交... 新建的空行, 还是
     }
 });
 

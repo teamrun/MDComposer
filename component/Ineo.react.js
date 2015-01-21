@@ -16,29 +16,58 @@ var Ineo = React.createClass({
         this.input = this.refs['ineo-input'].getDOMNode();
         this.sizeGen = this.refs['size-gen'].getDOMNode();
     },
-    componentDidUpdate: function(prevProps, prevState) {
-        // 内容不一样时, 尝试更新高度
-        if(this.state.content !== prevState.content){
-            var h = util.getStyleValue( window.getComputedStyle(this.sizeGen).height );
-            // console.log('got H', h);
-            // console.log('old H', this.state.inputH);
-            if(h !== this.state.inputH){
-                this.setState({
-                    inputH: h
-                });
-            }
-            console.timeEnd('a change');
+    componentWillReceiveProps: function(nextProps) {
+        if(nextProps.manualFocus){
+            this.input.focus();
         }
+    },
+    // 高度重新计算.. 逻辑很复杂啊...
+    componentDidUpdate: function(prevProps, prevState) {
+        var nowELD = this.props.editLineData, prevELD = prevProps.editLineData;
+        // 内容不一样时, 尝试更新高度
+        
+        if( nowELD ){
+            // editline前后两次不是同一行时 定位鼠标
+            if( prevELD ){
+                if( nowELD.id !== prevELD.id ){
+                    this.input.setSelectionRange(nowELD.cursor, nowELD.cursor);
+                }
+            }
+            // 现在edit以前不是edit 要定位
+            else{
+                this.input.setSelectionRange(nowELD.cursor, nowELD.cursor);
+            }
+            // 只要是新编辑行 就要重新计算高度
+            this.updateHeight();
+            return;
+        }
+        else{
+            // 现在没 以前在 也要重新计算
+            if(prevELD){
+                this.updateHeight();
+                return;
+            }
+        }
+
+        // 前后两次编写的内容有变更 计算
+        if(this.state.content !== prevState.content ){
+            this.updateHeight();
+        }
+        
     },
     render: function(){
         var styleObj = {
             height: this.state.inputH
         };
+        var editLineData = this.props.editLineData;
+
+        var content = this.state.content||(editLineData? editLineData.raw:'');
+        var extraClass = editLineData?editLineData.tag:'';
         // console.log('render...');
         return (
-            <div className="ineo" style={this.props.style}>
+            <div className="ineo" style={this.props.style} onClick={this._onClick}>
                 <textarea 
-                    className={"ineo-input"}
+                    className={"ineo-input "+extraClass}
                     ref="ineo-input"
                     style={styleObj}
 
@@ -46,21 +75,24 @@ var Ineo = React.createClass({
                     onPaste={this._onPaste}
                     onChange={this._onChange}
 
-                    value={this.state.content}
+                    value={content}
                 >
                 </textarea>
                 <div 
-                    className="size-gen" 
+                    className={"size-gen "+extraClass}
                     ref="size-gen"
-                    dangerouslySetInnerHTML={{__html: this.state.content.replace(/\ \ /g, ' &nbsp;')}}
+                    dangerouslySetInnerHTML={{__html: content.replace(/\ \ /g, ' &nbsp;')}}
                     >
                 </div>
             </div>
         );
     },
+    _onClick: function(e){
+        e.stopPropagation();
+    },
     // 同步内容, 控制高度
     _onChange: function(e){
-        console.time('a change');
+        // console.time('a change');
         var stateObj = {
             content: e.target.value
         };
@@ -126,6 +158,17 @@ var Ineo = React.createClass({
         // 定位鼠标指针
         var cursorPos = selStart + text.length;
         this.input.setSelectionRange(cursorPos, cursorPos);
+    },
+    updateHeight: function(){
+        var h = util.getStyleValue( window.getComputedStyle(this.sizeGen).height );
+        // console.log('got H', h);
+        // console.log('old H', this.state.inputH);
+        if(h !== this.state.inputH){
+            this.setState({
+                inputH: h
+            });
+        }
+
     }
 });
 

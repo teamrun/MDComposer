@@ -19,6 +19,12 @@ css准备: 让两者个样式完全一致, 同时注意`word-break: break-all;`�
 
 不能在`onChange`的处理函数中, 因为setState更新内容之后会有一定的时间间隔才能渲染到页面中, 在处理函数中取`.size-gen`元素的高度会有一个animationFrame的延迟. 应该在`componentDidUpdate`组件更新之后, 同时加一个content是否一致的判断优化.
 
+## 新建和编辑行
+
+这里需要好好思考... 现在的机制是: 新的一行最开始是没有id的, 回车之后创建id形成一个新的line 要不要统一呢...
+
 ## 粘贴内容
 
 onPaste然后取出其中的内容, 需要做`\n`判断, 有换行就立刻生成多个line
+
+

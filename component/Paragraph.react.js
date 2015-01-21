@@ -23,11 +23,11 @@ var Paragraph = React.createClass({
         // console.log('componentWillReceiveProps');
         // 尽管后面shouldUpdata会有判断 但是还是要减少一次计算
     },
-    // shouldComponentUpdate: function(nextProps, nextState){
-    //     // 内容有变更时才更新
-    //     // console.log('checking for should update');
-    //     // return nextProps.data.raw !== this.props.data.raw;
-    // },
+    shouldComponentUpdate: function(nextProps, nextState){
+        // 内容有变更时才更新
+        var nowContent = this.props.content, nowClass = this.state.classes;
+        return (nextProps.content !== nowContent || nextProps.classes !== nowClass);
+    },
     componentDidUpdate: function(){
         //
         //console.log('owneeeee updated');
@@ -39,12 +39,13 @@ var Paragraph = React.createClass({
                 >
                 </div>);
     },
-    _onClick: function(){
+    _onClick: function(e){
         /* 点击后会出现range
          * 将range位置, 和 自己的id传给action, action去做输入器的定位
          */
         
         this.props.editLine(this.props.lineId);
+        e.stopPropagation();
     }
 });
 
